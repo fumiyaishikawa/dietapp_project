@@ -60,13 +60,16 @@ class RouteServiceProvider extends ServiceProvider
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
+     * ステートレス：サーバーはクライアントのセッション情報を保持しない。->リクエストに対するレスポンスは変わらない。
+     * ステートフル：セッション情報が保持される。->セッションの状態によってリクエストに対するレスポンスが変わる。
+     * RouteServiceProvider.phpはアプリケーション起動時にルート定義を読み込むためのクラス
      *
      * @return void
      */
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
+             ->middleware('web')    // 'api'->'web'に変更した
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
