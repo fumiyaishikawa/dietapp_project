@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Socialite;
-use App\User;
 
 class LoginController extends Controller
 {
@@ -52,38 +50,5 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         return response()->json();
-    }
-
-    // Google認証用
-    public function redirectToGoogle()
-    {
-        // Googleへのリダイレクト
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function handleGoogleCallback()
-    {
-        // Google認証後の処理
-        $gUser = Socailite::driver('google')->stateless()->user();
-        // emailが合致するユーザーを取得
-        $user = User::where('email', $gUser->email)->first();
-        // 見つからなければ新しくユーザーを作成
-        if ($user == null) {
-            $user = $this->createUserByGoogle($gUser);
-        }
-        // ログイン処理
-        Auth::login($user, true);
-        return redirect('/user');
-    }
-
-    public function createUserByGoogle($gUser)
-    {
-        $user = User::create([
-            'name' => $gUser->name,
-            'email' => $gUser->email,
-            'password' => Hash::make(uniqid()), //ランダムな値を生成してハッシュ化する
-        ]);
-
-        return $user;
     }
 }

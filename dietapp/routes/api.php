@@ -24,5 +24,5 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 // Google認証
-Route::get('login/google', 'Auth\LoginController@redirectToGoogle')->name('loginToGoogle');
-Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback')->name('googleCallback');
+Route::get('login/google', 'OAuthLoginController@redirectToGoogle');
+Route::get('login/google/callback', 'OAuthLoginController@handleGoogleCallback');

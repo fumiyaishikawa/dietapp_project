@@ -10,10 +10,14 @@
         <div v-show="tab === 1">
             <h2>ログインフォーム</h2>
             <form @submit.prevent="login">
-                <label for="login-email">メールアドレス</label>
-                <input type="text" id="login-email" v-model="loginForm.email" />
-                <label for="login-password">パスワード</label>
-                <input type="password" id="login-password" v-model="loginForm.password" />
+                <p>
+                    <label for="login-email">メールアドレス</label>
+                    <input type="text" id="login-email" v-model="loginForm.email" />
+                </p>
+                <p>
+                    <label for="login-password">パスワード</label>
+                    <input type="password" id="login-password" v-model="loginForm.password" />
+                </p>
                 <div>
                     <button type="submit">ログイン</button>
                 </div>
@@ -23,20 +27,29 @@
         <div v-show="tab === 2">
             <h2>新規登録フォーム</h2>
             <form @submit.prevent="register">
-                <label for="username">ユーザー名</label>
-                <input type="text" id="username" v-model="registerForm.name" />
-                <label for="email">メールアドレス</label>
-                <input type="text" id="email" v-model="registerForm.email" />
-                <label for="password">パスワード</label>
-                <input type="password" id="password" v-model="registerForm.password" />
-                <label for="password-confirmation">パスワード確認</label>
-                <input
-                    type="password"
-                    id="password-confirmation"
-                    v-model="registerForm.password_confirmation"
-                />
+                <p>
+                    <label for="username">ユーザー名</label>
+                    <input type="text" id="username" v-model="registerForm.name" />
+                </p>
+                <p>
+                    <label for="email">メールアドレス</label>
+                    <input type="text" id="email" v-model="registerForm.email" />
+                </p>
+                <p>
+                    <label for="password">パスワード</label>
+                    <input type="password" id="password" v-model="registerForm.password" />
+                    ※パスワードは半角英数字六文字以上で作成してください。
+                </p>
+                <p>
+                    <label for="password-confirmation">パスワード確認</label>
+                    <input
+                        type="password"
+                        id="password-confirmation"
+                        v-model="registerForm.password_confirmation"
+                    />
+                </p>
                 <div>
-                    <button type="submit">ログイン</button>
+                    <button type="submit">新規登録</button>
                 </div>
             </form>
         </div>
@@ -74,11 +87,28 @@ export default {
         };
     },
     methods: {
-        login() {
+        // ログイン機能
+        async login() {
             console.log(this.loginForm);
+            // authストアのregisterアクションを呼び出す
+            await this.$store.dispatch("auth/login", this.loginForm);
+            // トップページに戻る
+            this.$router.push("/user");
         },
-        register() {
+        // ユーザーの新規登録
+        async register() {
             console.log(this.registerForm);
+            // authストアのregisterアクションを呼び出す
+            await this.$store.dispatch("auth/register", this.registerForm);
+            // トップページに戻る
+            this.$router.push("/user");
+        },
+        // Googleアカウントによるログイン機能
+        async googleLogin() {
+            // authストアのregisterアクションを呼び出す
+            await this.$store.dispatch("auth/googleLogin");
+            // トップページに戻る
+            this.$router.push("/user");
         }
     }
 };
