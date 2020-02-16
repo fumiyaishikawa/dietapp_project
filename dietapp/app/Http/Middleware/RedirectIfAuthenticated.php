@@ -17,8 +17,10 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        // RedirectIfAuthenticatedミドルウェアはログイン状態によりアクセス権限を設定できる
+        // アクセス権限がない場合はuserAPIを読み込んでリダイレクトさせる
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+            return redirect()->route('user');
         }
 
         return $next($request);

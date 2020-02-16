@@ -4,7 +4,12 @@ const state = {
     user: null
 }
 
-const getters = {}
+const getters = {
+    // ログインチェック
+    check: state => !!state.user,
+    // ログインしているユーザー名の表示
+    username: state => state.user ? state.user.name : 'ゲスト'
+}
 
 const mutations = {
     // ユーザーの新規登録
@@ -30,9 +35,16 @@ const actions = {
         context.commit('setUser', null)
     },
     // グーグル認証機能->api通信がうまくできない
-    async googleLogin(context) {
-        const response = await axios.get('/api/login/google')
-        context.commit('setUser', response.data)
+    // async googleLogin(context) {
+    //     const response = await axios.get('/api/login/google')
+    //     context.commit('setUser', response.data)
+    // },
+    // ユーザー認証を維持する
+    async currentUser(context) {
+        const response = await axios.get('/api/user')
+        // ログインしていない場合は空文字を返す
+        const user = response.data || null
+        context.commit('setUser', user) // nullを返しているのでゲスト様が表示されない場合は''に変えること
     }
 }
 

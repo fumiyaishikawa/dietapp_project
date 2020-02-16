@@ -8,6 +8,9 @@ import UserData from './pages/UserData.vue'
 import UserInfo from './pages/UserInfo.vue'
 import Management from './pages/Management.vue'
 
+// ナビゲーションガード用
+import store from './store'
+
 // VueRouterプラグインを使う。-><router-view>タグが使えるようになる。
 Vue.use(VueRouter)
 
@@ -15,23 +18,63 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        component: Login
+        component: Login,
+        // ナビゲーションガード用
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next('/user')   // ログインしていればユーザーページ
+            } else {
+                next()   // ログインしていなければそのまま遷移
+            }
+        }
     },
     {
         path: '/user',
-        component: UserPage
+        component: UserPage,
+        // ナビゲーションガード用
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()   // ログインしていればそのまま遷移
+            } else {
+                next('/')   // ログインしていなければログインページ
+            }
+        }
     },
     {
         path: '/user/data',
-        component: UserData
+        component: UserData,
+        // ナビゲーションガード用
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()   // ログインしていればそのまま遷移
+            } else {
+                next('/')   // ログインしていなければログインページ
+            }
+        }
     },
     {
         path: '/user/info',
-        component: UserInfo
+        component: UserInfo,
+        // ナビゲーションガード用
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()   // ログインしていればそのまま遷移
+            } else {
+                next('/')   // ログインしていなければログインページ
+            }
+        }
     },
     {
         path: '/user/management',
-        component: Management
+        component: Management,
+        // ナビゲーションガード用
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()   // ログインしていればそのまま遷移
+            } else {
+                next('/')   // ログインしていなければログインページ
+            }
+        }
     },
 ]
 
